@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+
+# Virtual Environment
+backend/venv/
+venv/
+
+# Environment Variables
+.env
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# ML Models
+*.h5
+*.pt
+*.pth
+*.ckpt
+*.joblib
+*.pkl
+
+# Logs
+*.log
+
+# FastAPI / Backend
+backend/.pytest_cache/
+backend/.mypy_cache/
+
+
+# Node / React
+frontend/node_modules/
+frontend/dist/
+
+# npm logs
+npm-debug.log*
+
+
+# VS Code
+.vscode/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Docker
+*.tar
+
+# Database
+*.db
+
+# Temporary Files
+temp/
+tmp/
+cache/
