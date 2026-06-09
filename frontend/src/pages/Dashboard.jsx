@@ -4,12 +4,15 @@ import Navbar from "../components/Navbar";
 import WeatherCard from "../components/WeatherCard";
 import ForecastChart from "../components/ForecastChart";
 import ClimateMap from "../components/ClimateMap";
+import HistoricalChart from "../components/HistoricalChart";
 
 import API from "../services/api";
 
 const Dashboard = () => {
 
   const [weather, setWeather] = useState(null);
+
+  const [historyData, setHistoryData] = useState([]);
 
   const [city, setCity] = useState("Delhi");
 
@@ -22,6 +25,12 @@ const Dashboard = () => {
       const response = await API.get(`/weather/${selectedCity}`);
 
       setWeather(response.data);
+
+      const historyResponse = await API.get(
+        `/history/${selectedCity}`
+      );
+
+      setHistoryData(historyResponse.data);
 
     } catch (error) {
 
@@ -94,13 +103,24 @@ const Dashboard = () => {
             value={`${weather?.wind_speed || "--"} km/h`}
           />
 
+          <WeatherCard
+            title="PM2.5"
+            value={`${weather?.pm25 || "--"}`}
+          />
+
+          <WeatherCard
+            title="AQI Risk"
+            value={`${weather?.aqi_risk || "--"}`}
+          />
+
         </div>
 
         <ForecastChart
           forecastData={weather?.forecast || []}
         />
 
-        <ClimateMap />
+        <HistoricalChart historyData={historyData} />
+        <ClimateMap weather={weather} />
 
       </div>
 
