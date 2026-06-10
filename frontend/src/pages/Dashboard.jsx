@@ -13,7 +13,10 @@ const Dashboard = () => {
   const [weather, setWeather] = useState(null);
 
   const [historyData, setHistoryData] = useState([]);
-
+  const [predictions, setPredictions] = useState({
+    lstm: null,
+    xgboost: null
+  });
   const [city, setCity] = useState("Delhi");
 
   const [inputCity, setInputCity] = useState("");
@@ -31,6 +34,14 @@ const Dashboard = () => {
       );
 
       setHistoryData(historyResponse.data);
+      const predictionResponse = await API.get(
+        "/predict"
+      );
+
+      setPredictions({
+        lstm: predictionResponse.data.lstm_prediction,
+        xgboost: predictionResponse.data.xgboost_prediction
+      });
 
     } catch (error) {
 
@@ -111,6 +122,16 @@ const Dashboard = () => {
           <WeatherCard
             title="AQI Risk"
             value={`${weather?.aqi_risk || "--"}`}
+          />
+
+          <WeatherCard
+            title="LSTM Forecast"
+            value={`${predictions.lstm?.toFixed(1) || "--"} °C`}
+          />
+
+          <WeatherCard
+            title="XGBoost Forecast"
+            value={`${predictions.xgboost?.toFixed(1) || "--"} °C`}
           />
 
         </div>

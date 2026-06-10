@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes.analytics import router as analytics_router
+from app.routes.forecast import router as forecast_router
+from app.routes.explain import router as explain_router
 
 from app.routes.weather import router as weather_router
 
@@ -15,7 +17,8 @@ app.add_middleware(
 )
 
 app.include_router(analytics_router)
-
+app.include_router(forecast_router)
+app.include_router(explain_router)
 app.include_router(weather_router)
 
 
