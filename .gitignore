@@ -30,7 +30,7 @@ venv/
 # FastAPI / Backend
 backend/.pytest_cache/
 backend/.mypy_cache/
-
+backend/app/rag/chroma_db/
 
 # Node / React
 frontend/node_modules/

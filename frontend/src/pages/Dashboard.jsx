@@ -5,6 +5,7 @@ import WeatherCard from "../components/WeatherCard";
 import ForecastChart from "../components/ForecastChart";
 import ClimateMap from "../components/ClimateMap";
 import HistoricalChart from "../components/HistoricalChart";
+import ClimateAssistant from "../components/ClimateAssistant";
 
 import API from "../services/api";
 
@@ -142,6 +143,7 @@ const Dashboard = () => {
 
         <HistoricalChart historyData={historyData} />
         <ClimateMap weather={weather} />
+        <ClimateAssistant />
 
       </div>
 
