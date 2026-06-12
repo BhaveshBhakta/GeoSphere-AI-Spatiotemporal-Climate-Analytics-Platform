@@ -1,37 +1,52 @@
-from app.agent.router import route_query
+from app.agent.intent_classifier import (
+    classify_intent
+)
+
+from app.agent.explainer import (
+    generate_explanation
+)
 
 from app.agent.tools import (
-    rag_tool,
+    weather_tool,
     prediction_tool,
-    weather_tool
+    rag_tool
 )
 
 
 def run_agent(question):
 
-    route = route_query(question)
+    route = classify_intent(question)
 
     print(f"Selected Route: {route}")
 
-    if route == "prediction":
+    if route == "weather":
+
+        context = weather_tool("Delhi")
 
         return {
-            "route": "prediction",
-            "data": prediction_tool()
+            "answer": generate_explanation(
+                question,
+                context
+            )
         }
 
-    elif route == "weather":
+    elif route == "prediction":
 
-        weather_data = weather_tool("Delhi")
+        context = prediction_tool()
 
         return {
-            "route": "weather",
-            "data": weather_data
+            "answer": generate_explanation(
+                question,
+                context
+            )
         }
 
-    else:
+    elif route == "rag":
 
         return {
-            "route": "rag",
             "answer": rag_tool(question)
         }
+
+    return {
+        "answer": "Unable to determine route."
+    }

@@ -5,7 +5,13 @@ const ClimateAssistant = () => {
 
   const [question, setQuestion] = useState("");
 
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([
+    {
+      role: "assistant",
+      content:
+        "Hello! I am your Climate Intelligence Assistant. Ask me about weather, climate change, predictions, AQI, or climate reports."
+    }
+  ]);
 
   const [loading, setLoading] = useState(false);
 
@@ -13,32 +19,37 @@ const ClimateAssistant = () => {
 
     if (!question.trim()) return;
 
-    const userMessage = {
-      role: "user",
-      content: question
-    };
+    const currentQuestion = question;
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages(prev => [
+      ...prev,
+      {
+        role: "user",
+        content: currentQuestion
+      }
+    ]);
+
+    setQuestion("");
 
     setLoading(true);
 
     try {
 
       const response = await API.post(
-        "/chat",
+        "/agent-chat",
         {
-          question
+          question: currentQuestion
         }
       );
 
-      const assistantMessage = {
-        role: "assistant",
-        content: response.data.answer
-      };
-
       setMessages(prev => [
         ...prev,
-        assistantMessage
+        {
+          role: "assistant",
+          content:
+            response.data.answer ||
+            "No response generated."
+        }
       ]);
 
     } catch (error) {
@@ -49,21 +60,24 @@ const ClimateAssistant = () => {
         ...prev,
         {
           role: "assistant",
-          content: "Error generating response."
+          content:
+            "Unable to contact Climate Agent."
         }
       ]);
 
+    } finally {
+
+      setLoading(false);
+
     }
-
-    setQuestion("");
-
-    setLoading(false);
   };
 
   return (
     <div className="assistant-container">
 
-      <h2>Climate Assistant</h2>
+      <h2>
+        Climate Intelligence Agent
+      </h2>
 
       <div className="chat-window">
 
@@ -79,9 +93,11 @@ const ClimateAssistant = () => {
         ))}
 
         {loading && (
+
           <div className="message assistant">
-            Thinking...
+            Analyzing...
           </div>
+
         )}
 
       </div>
@@ -90,14 +106,25 @@ const ClimateAssistant = () => {
 
         <input
           type="text"
-          placeholder="Ask climate questions..."
+          placeholder="Ask anything about climate..."
           value={question}
           onChange={(e) =>
             setQuestion(e.target.value)
           }
+          onKeyDown={(e) => {
+
+            if (e.key === "Enter") {
+
+              askAssistant();
+
+            }
+
+          }}
         />
 
-        <button onClick={askAssistant}>
+        <button
+          onClick={askAssistant}
+        >
           Send
         </button>
 

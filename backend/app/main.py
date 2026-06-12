@@ -5,6 +5,7 @@ from app.routes.forecast import router as forecast_router
 from app.routes.explain import router as explain_router
 from app.routes.chat import router as chat_router
 from app.routes.weather import router as weather_router
+from app.routes.agent_chat import router as agent_router
 
 app = FastAPI()
 
@@ -21,6 +22,7 @@ app.include_router(forecast_router)
 app.include_router(explain_router)
 app.include_router(weather_router)
 app.include_router(chat_router)
+app.include_router(agent_router)
 
 
 @app.get("/")
