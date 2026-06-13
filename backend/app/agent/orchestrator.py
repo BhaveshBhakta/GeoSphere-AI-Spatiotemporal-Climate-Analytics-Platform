@@ -9,11 +9,12 @@ from app.agent.explainer import (
 from app.agent.tools import (
     weather_tool,
     prediction_tool,
-    rag_tool
+    rag_tool,
+    risk_tool
 )
 
 
-def run_agent(question):
+def run_agent(question, city="Delhi"):
 
     route = classify_intent(question)
 
@@ -21,9 +22,10 @@ def run_agent(question):
 
     if route == "weather":
 
-        context = weather_tool("Delhi")
+        context = weather_tool(city)
 
         return {
+            "route": route,
             "answer": generate_explanation(
                 question,
                 context
@@ -32,9 +34,22 @@ def run_agent(question):
 
     elif route == "prediction":
 
-        context = prediction_tool()
+        context = prediction_tool(city)
 
         return {
+            "route": route,
+            "answer": generate_explanation(
+                question,
+                context
+            )
+        }
+
+    elif route == "risk":
+
+        context = risk_tool(city)
+
+        return {
+            "route": route,
             "answer": generate_explanation(
                 question,
                 context
@@ -44,9 +59,11 @@ def run_agent(question):
     elif route == "rag":
 
         return {
+            "route": route,
             "answer": rag_tool(question)
         }
 
     return {
+        "route": "unknown",
         "answer": "Unable to determine route."
     }

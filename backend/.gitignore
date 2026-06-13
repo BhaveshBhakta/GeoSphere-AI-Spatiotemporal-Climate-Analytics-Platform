@@ -1,0 +1,6 @@
+node_modules/
+check_tables.py
+debug_tables.py
+create_risk_table.py
+package.json
+package-lock.json

@@ -42,9 +42,14 @@ def route_query(question):
 
     risk_keywords = [
         "risk",
+        "danger",
+        "dangerous",
         "heatwave",
         "flood",
-        "drought"
+        "drought",
+        "safe",
+        "outdoor",
+        "hazard"
     ]
 
     if any(k in q for k in prediction_keywords):

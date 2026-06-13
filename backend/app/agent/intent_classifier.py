@@ -27,32 +27,40 @@ rag
 - explanations from climate reports
 
 weather
-- current weather
-- temperature today
+- current weather conditions
+- current temperature
 - humidity
 - rainfall
-- wind
-- AQI
-- weather conditions
+- wind speed
+- AQI values
 
 prediction
 - future weather
 - tomorrow
-- forecast
-- predict
 - next week
+- forecast
+- prediction
 
 analytics
 - historical trends
-- history
-- over time
-- past climate data
+- climate history
+- past weather patterns
+- over time analysis
 
 risk
-- drought risk
-- flood risk
+- danger assessment
+- safety assessment
 - heatwave risk
+- flood risk
+- drought risk
+- air quality risk
 - climate risk
+- "Is it safe?"
+- "Should I go outside?"
+- "Should I avoid outdoor activities?"
+- "How dangerous is it?"
+- health impacts
+- exposure risk
 
 Question:
 {question}

@@ -5,7 +5,9 @@ import WeatherCard from "../components/WeatherCard";
 import ForecastChart from "../components/ForecastChart";
 import ClimateMap from "../components/ClimateMap";
 import HistoricalChart from "../components/HistoricalChart";
+import RiskTrendChart from "../components/RiskTrendChart";
 import ClimateAssistant from "../components/ClimateAssistant";
+import RiskCard from "../components/RiskCard";
 
 import API from "../services/api";
 
@@ -13,11 +15,17 @@ const Dashboard = () => {
 
   const [weather, setWeather] = useState(null);
 
+  const [riskScore, setRiskScore] = useState(null);
+
+  const [riskHistory, setRiskHistory] = useState([]);
+
   const [historyData, setHistoryData] = useState([]);
+
   const [predictions, setPredictions] = useState({
     lstm: null,
     xgboost: null
   });
+
   const [city, setCity] = useState("Delhi");
 
   const [inputCity, setInputCity] = useState("");
@@ -26,27 +34,64 @@ const Dashboard = () => {
 
     try {
 
-      const response = await API.get(`/weather/${selectedCity}`);
+      // Weather
+      const response = await API.get(
+        `/weather/${selectedCity}`
+      );
 
       setWeather(response.data);
 
+      // Historical Weather
       const historyResponse = await API.get(
         `/history/${selectedCity}`
       );
 
-      setHistoryData(historyResponse.data);
+      setHistoryData(
+        historyResponse.data
+      );
+
+      // Forecasts
       const predictionResponse = await API.get(
         "/predict"
       );
 
       setPredictions({
-        lstm: predictionResponse.data.lstm_prediction,
-        xgboost: predictionResponse.data.xgboost_prediction
+        lstm:
+          predictionResponse.data
+            .lstm_prediction,
+
+        xgboost:
+          predictionResponse.data
+            .xgboost_prediction
       });
+
+      // Risk Score
+      const riskResponse = await API.get(
+        `/risk/${selectedCity}`
+      );
+
+      setRiskScore(
+        riskResponse.data
+          .risk_report
+          .overall_score
+      );
+
+      // Risk History
+      const riskHistoryResponse =
+        await API.get(
+          `/risk-history/${selectedCity}`
+        );
+
+      setRiskHistory(
+        riskHistoryResponse.data
+      );
 
     } catch (error) {
 
-      console.error("Error fetching weather:", error);
+      console.error(
+        "Error fetching dashboard data:",
+        error
+      );
 
     }
   };
@@ -64,10 +109,12 @@ const Dashboard = () => {
       setCity(inputCity);
 
       setInputCity("");
+
     }
   };
 
   return (
+
     <div>
 
       <Navbar />
@@ -80,17 +127,25 @@ const Dashboard = () => {
             type="text"
             placeholder="Search city..."
             value={inputCity}
-            onChange={(e) => setInputCity(e.target.value)}
+            onChange={(e) =>
+              setInputCity(e.target.value)
+            }
           />
 
-          <button onClick={handleSearch}>
+          <button
+            onClick={handleSearch}
+          >
             Search
           </button>
 
         </div>
 
         <h2 className="location-title">
-          {weather?.city}, {weather?.country}
+
+          {weather?.city},
+          {" "}
+          {weather?.country}
+
         </h2>
 
         <div className="card-grid">
@@ -135,19 +190,36 @@ const Dashboard = () => {
             value={`${predictions.xgboost?.toFixed(1) || "--"} °C`}
           />
 
+          <RiskCard
+            score={riskScore || "--"}
+          />
+
         </div>
 
         <ForecastChart
-          forecastData={weather?.forecast || []}
+          forecastData={
+            weather?.forecast || []
+          }
         />
 
-        <HistoricalChart historyData={historyData} />
-        <ClimateMap weather={weather} />
+        <HistoricalChart
+          historyData={historyData}
+        />
+
+        <RiskTrendChart
+          data={riskHistory}
+        />
+
+        <ClimateMap
+          weather={weather}
+        />
+
         <ClimateAssistant />
 
       </div>
 
     </div>
+
   );
 };
 

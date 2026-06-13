@@ -6,6 +6,8 @@ from app.routes.explain import router as explain_router
 from app.routes.chat import router as chat_router
 from app.routes.weather import router as weather_router
 from app.routes.agent_chat import router as agent_router
+from app.routes.risk import router as risk_router
+from app.routes.risk_history import ( router as risk_history_router )
 
 app = FastAPI()
 
@@ -23,7 +25,8 @@ app.include_router(explain_router)
 app.include_router(weather_router)
 app.include_router(chat_router)
 app.include_router(agent_router)
-
+app.include_router(risk_router)
+app.include_router(risk_history_router)
 
 @app.get("/")
 def home():
