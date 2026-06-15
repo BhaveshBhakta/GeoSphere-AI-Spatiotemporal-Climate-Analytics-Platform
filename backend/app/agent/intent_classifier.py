@@ -55,12 +55,31 @@ risk
 - drought risk
 - air quality risk
 - climate risk
-- "Is it safe?"
-- "Should I go outside?"
-- "Should I avoid outdoor activities?"
-- "How dangerous is it?"
 - health impacts
 - exposure risk
+
+Examples:
+- Is Delhi safe today?
+- Should I go outside?
+- Is Delhi dangerous today?
+- Is there a heatwave risk?
+- Is air pollution dangerous?
+
+analysis
+- combine weather + risk + forecast + climate knowledge
+- climate intelligence
+- climate impact assessment
+- climate challenges
+- climate recommendations
+- future climate risks
+- complex reasoning requiring multiple tools
+
+Examples:
+- How will climate change affect Delhi?
+- What are Delhi's biggest climate risks?
+- Is Delhi becoming more dangerous due to climate change?
+- What climate challenges will Delhi face in the future?
+- How should Delhi prepare for climate change?
 
 Question:
 {question}
@@ -72,6 +91,7 @@ weather
 prediction
 analytics
 risk
+analysis
 """
 
     response = llm.invoke(prompt)

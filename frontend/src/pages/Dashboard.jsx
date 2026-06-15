@@ -214,7 +214,9 @@ const Dashboard = () => {
           weather={weather}
         />
 
-        <ClimateAssistant />
+        <ClimateAssistant
+          city={city}
+        />
 
       </div>
 

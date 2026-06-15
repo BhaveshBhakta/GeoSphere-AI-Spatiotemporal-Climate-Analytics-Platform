@@ -1,7 +1,9 @@
 import { useState } from "react";
 import API from "../services/api";
 
-const ClimateAssistant = () => {
+const ClimateAssistant = ({
+  city
+}) => {
 
   const [question, setQuestion] = useState("");
 
@@ -38,7 +40,8 @@ const ClimateAssistant = () => {
       const response = await API.post(
         "/agent-chat",
         {
-          question: currentQuestion
+          question: currentQuestion,
+          city: city
         }
       );
 
