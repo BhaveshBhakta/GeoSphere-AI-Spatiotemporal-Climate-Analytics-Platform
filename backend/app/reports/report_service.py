@@ -3,7 +3,8 @@ from app.services.weather_service import (
 )
 
 from app.agent.tools import (
-    risk_tool
+    risk_tool,
+    analytics_tool
 )
 
 from app.ml.forecasting.predict import (
@@ -27,9 +28,7 @@ def create_climate_report(
     city="Delhi"
 ):
 
-    # -----------------------------
     # WEATHER DATA
-    # -----------------------------
 
     weather_data = get_weather_data(city)
 
@@ -53,9 +52,7 @@ AQI Risk:
 {weather_data['aqi_risk']}
 """
 
-    # -----------------------------
     # FORECAST DATA
-    # -----------------------------
 
     lstm_prediction = predict_temperature()
 
@@ -72,9 +69,7 @@ XGBoost Forecast:
 {round(xgb_prediction, 2)} °C
 """
 
-    # -----------------------------
     # RISK DATA
-    # -----------------------------
 
     risk_data = risk_tool(city)
 
@@ -93,36 +88,34 @@ Flood Risk:
 
 Drought Risk:
 {risk_data['drought']['level']}
-"""
 
-    # -----------------------------
+"""
+    # Historical 
+
+    historical = analytics_tool(
+        city
+    )
+
     # AI SUMMARY
-    # -----------------------------
 
     summary = generate_report_summary(
         city,
         weather,
         forecast,
-        risk
+        risk,
+        historical
     )
-
-    # -----------------------------
     # REPORT CONTENT
-    # -----------------------------
 
     report_data = {
-
         "City": city,
-
         "Current Weather": weather,
-
         "Forecast Analysis": forecast,
-
         "Risk Assessment": risk,
-
+        "Historical Analytics": historical,
         "AI Climate Analysis": summary
-
     }
+
 
     filename = (
         f"{city}_Climate_Report.pdf"

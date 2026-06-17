@@ -16,18 +16,14 @@ from app.risk.store_risk import (
 )
 
 
-# ----------------------------
 # RAG TOOL
-# ----------------------------
 
 def rag_tool(question):
 
     return ask_climate_assistant(question)
 
 
-# ----------------------------
 # WEATHER TOOL
-# ----------------------------
 
 def weather_tool(city="Delhi"):
 
@@ -58,10 +54,7 @@ Task:
 Explain current weather conditions and possible causes.
 """
     
-
-# ----------------------------
 # PREDICTION TOOL
-# ----------------------------
 
 def prediction_tool(city="Delhi"):
 
@@ -92,31 +85,77 @@ Explain whether temperature is likely to increase or decrease.
 Mention uncertainty if the models disagree.
 """
     
-
-# ----------------------------
 # ANALYTICS TOOL
-# ----------------------------
-
 def analytics_tool(city):
 
     db = SessionLocal()
 
     records = (
+
         db.query(WeatherHistory)
+
         .filter(
             WeatherHistory.city == city
         )
+
         .all()
+
     )
 
     db.close()
 
-    return records
+    if not records:
 
+        return "No historical data available."
 
-# ----------------------------
+    temperatures = [
+        r.temperature
+        for r in records
+    ]
+
+    humidity = [
+        r.humidity
+        for r in records
+    ]
+
+    rainfall = [
+        r.rainfall
+        for r in records
+    ]
+
+    avg_temp = (
+        sum(temperatures)
+        / len(temperatures)
+    )
+
+    avg_humidity = (
+        sum(humidity)
+        / len(humidity)
+    )
+
+    avg_rainfall = (
+        sum(rainfall)
+        / len(rainfall)
+    )
+
+    return f"""
+City:
+{city}
+
+Historical Records:
+{len(records)}
+
+Average Temperature:
+{avg_temp:.2f} °C
+
+Average Humidity:
+{avg_humidity:.2f} %
+
+Average Rainfall:
+{avg_rainfall:.2f} mm
+"""
+
 # RISK TOOL
-# ----------------------------
 
 def risk_tool(city="Delhi"):
 

@@ -17,6 +17,9 @@ from app.agent.multi_tool_agent import (
     multi_tool_analysis
 )
 
+from app.agent.analytics_agent import (
+    historical_analysis
+)
 
 def run_agent(
     question,
@@ -105,8 +108,10 @@ Suggest precautions if needed.
 
             "route": route,
 
-            "answer":
-            "Historical Analytics Agent is under development."
+            "answer": historical_analysis(
+                question,
+                city
+            )
         }
 
 

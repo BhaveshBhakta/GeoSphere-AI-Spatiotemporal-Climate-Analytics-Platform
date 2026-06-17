@@ -44,8 +44,14 @@ prediction
 analytics
 - historical trends
 - climate history
+- historical weather
 - past weather patterns
 - over time analysis
+- trend analysis
+- has temperature increased
+- has climate changed
+- historical climate risk
+- long term climate trends
 
 risk
 - danger assessment
