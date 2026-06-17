@@ -46,14 +46,18 @@ const ClimateAssistant = ({
       );
 
       setMessages(prev => [
-        ...prev,
-        {
-          role: "assistant",
-          content:
-            response.data.answer ||
-            "No response generated."
-        }
-      ]);
+      ...prev,
+      {
+        role: "assistant",
+
+        content:
+          response.data.answer ||
+          "No response generated.",
+
+        route:
+          response.data.route || null
+      }
+    ]);
 
     } catch (error) {
 
@@ -90,7 +94,19 @@ const ClimateAssistant = ({
             key={index}
             className={`message ${msg.role}`}
           >
+
+            {msg.route && (
+
+              <div
+                className="route-badge"
+              >
+                {msg.route.toUpperCase()}
+              </div>
+
+            )}
+
             {msg.content}
+
           </div>
 
         ))}

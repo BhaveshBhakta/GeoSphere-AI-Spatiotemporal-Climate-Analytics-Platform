@@ -7,6 +7,8 @@ import ClimateMap from "../components/ClimateMap";
 import HistoricalChart from "../components/HistoricalChart";
 import RiskTrendChart from "../components/RiskTrendChart";
 import ClimateAssistant from "../components/ClimateAssistant";
+import DocumentAssistant from "../components/DocumentAssistant";
+import ReportGenerator from "../components/ReportGenerator";
 import RiskCard from "../components/RiskCard";
 
 import API from "../services/api";
@@ -35,13 +37,13 @@ const Dashboard = () => {
     try {
 
       // Weather
-      const response = await API.get(
+      const weatherResponse = await API.get(
         `/weather/${selectedCity}`
       );
 
-      setWeather(response.data);
+      setWeather(weatherResponse.data);
 
-      // Historical Weather
+      // Historical Data
       const historyResponse = await API.get(
         `/history/${selectedCity}`
       );
@@ -50,7 +52,7 @@ const Dashboard = () => {
         historyResponse.data
       );
 
-      // Forecasts
+      // Forecast
       const predictionResponse = await API.get(
         "/predict"
       );
@@ -104,7 +106,7 @@ const Dashboard = () => {
 
   const handleSearch = () => {
 
-    if (inputCity.trim() !== "") {
+    if (inputCity.trim()) {
 
       setCity(inputCity);
 
@@ -121,6 +123,8 @@ const Dashboard = () => {
 
       <div className="dashboard-container">
 
+        {/* Search */}
+
         <div className="search-bar">
 
           <input
@@ -128,7 +132,9 @@ const Dashboard = () => {
             placeholder="Search city..."
             value={inputCity}
             onChange={(e) =>
-              setInputCity(e.target.value)
+              setInputCity(
+                e.target.value
+              )
             }
           />
 
@@ -140,6 +146,8 @@ const Dashboard = () => {
 
         </div>
 
+        {/* City */}
+
         <h2 className="location-title">
 
           {weather?.city},
@@ -147,6 +155,8 @@ const Dashboard = () => {
           {weather?.country}
 
         </h2>
+
+        {/* Metrics */}
 
         <div className="card-grid">
 
@@ -196,27 +206,53 @@ const Dashboard = () => {
 
         </div>
 
+        {/* Forecast */}
+
         <ForecastChart
           forecastData={
             weather?.forecast || []
           }
         />
 
+        {/* Historical Weather */}
+
         <HistoricalChart
           historyData={historyData}
         />
+
+        {/* Risk Trend */}
 
         <RiskTrendChart
           data={riskHistory}
         />
 
+        {/* Map */}
+
         <ClimateMap
           weather={weather}
         />
 
-        <ClimateAssistant
-          city={city}
-        />
+        {/* AI Section */}
+
+        <div className="assistant-section">
+
+          <ClimateAssistant
+            city={city}
+          />
+
+          <DocumentAssistant />
+
+        </div>
+
+        {/* Report */}
+
+        <div className="report-section">
+
+          <ReportGenerator
+            city={city}
+          />
+
+        </div>
 
       </div>
 
