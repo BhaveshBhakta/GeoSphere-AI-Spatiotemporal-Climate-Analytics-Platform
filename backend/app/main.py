@@ -12,6 +12,8 @@ from app.routes.report import (router as report_router)
 from app.routes.upload import (router as upload_router)
 from app.routes.upload_chat import (router as upload_chat_router)
 from app.routes.compare import (router as compare_router)
+from app.routes.alerts import (router as alerts_router)
+
 
 app = FastAPI()
 
@@ -35,6 +37,7 @@ app.include_router(report_router)
 app.include_router(upload_router)
 app.include_router(upload_chat_router)
 app.include_router(compare_router)
+app.include_router(alerts_router)
 
 @app.get("/")
 def home():

@@ -10,6 +10,7 @@ import ClimateAssistant from "../components/ClimateAssistant";
 import DocumentAssistant from "../components/DocumentAssistant";
 import ReportGenerator from "../components/ReportGenerator";
 import RiskCard from "../components/RiskCard";
+import AlertBanner from "../components/AlertBanner";
 
 import API from "../services/api";
 
@@ -20,6 +21,8 @@ const Dashboard = () => {
   const [riskScore, setRiskScore] = useState(null);
 
   const [riskHistory, setRiskHistory] = useState([]);
+
+  const [alerts, setAlerts] = useState([]);
 
   const [historyData, setHistoryData] = useState([]);
 
@@ -86,6 +89,17 @@ const Dashboard = () => {
 
       setRiskHistory(
         riskHistoryResponse.data
+      );
+
+      // Alerts
+
+      const alertsResponse =
+        await API.get(
+          `/alerts/${selectedCity}`
+        );
+
+      setAlerts(
+        alertsResponse.data.alerts
       );
 
     } catch (error) {
@@ -155,6 +169,8 @@ const Dashboard = () => {
           {weather?.country}
 
         </h2>
+
+        <AlertBanner alerts={alerts}/>
 
         {/* Metrics */}
 
