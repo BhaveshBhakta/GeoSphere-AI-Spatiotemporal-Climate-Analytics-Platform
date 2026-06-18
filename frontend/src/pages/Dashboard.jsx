@@ -11,6 +11,7 @@ import DocumentAssistant from "../components/DocumentAssistant";
 import ReportGenerator from "../components/ReportGenerator";
 import RiskCard from "../components/RiskCard";
 import AlertBanner from "../components/AlertBanner";
+import ClimateInsights from "../components/ClimateInsights";
 
 import API from "../services/api";
 
@@ -171,6 +172,10 @@ const Dashboard = () => {
         </h2>
 
         <AlertBanner alerts={alerts}/>
+
+        {/* Climate Insight */}
+
+        <ClimateInsights city={city}/>
 
         {/* Metrics */}
 
