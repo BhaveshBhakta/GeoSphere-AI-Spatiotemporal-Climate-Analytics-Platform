@@ -12,6 +12,7 @@ import ReportGenerator from "../components/ReportGenerator";
 import RiskCard from "../components/RiskCard";
 import AlertBanner from "../components/AlertBanner";
 import ClimateInsights from "../components/ClimateInsights";
+import CityComparison from "../components/CityComparison";
 
 import API from "../services/api";
 
@@ -344,6 +345,10 @@ const Dashboard = () => {
           <DocumentAssistant />
 
         </div>
+
+         {/* City Comparison */}
+
+        <CityComparison />
 
         {/* Report */}
 
