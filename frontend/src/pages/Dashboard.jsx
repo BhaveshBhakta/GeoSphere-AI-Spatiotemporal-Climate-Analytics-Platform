@@ -27,6 +27,10 @@ const Dashboard = () => {
 
   const [historyData, setHistoryData] = useState([]);
 
+  const [loading, setLoading] = useState(true);
+
+  const [error, setError] = useState("");
+
   const [predictions, setPredictions] = useState({
     lstm: null,
     xgboost: null
@@ -40,28 +44,62 @@ const Dashboard = () => {
 
     try {
 
-      // Weather
-      const weatherResponse = await API.get(
-        `/weather/${selectedCity}`
-      );
+      setLoading(true);
 
-      setWeather(weatherResponse.data);
+      setError("");
 
-      // Historical Data
-      const historyResponse = await API.get(
-        `/history/${selectedCity}`
+      const [
+
+        weatherResponse,
+
+        historyResponse,
+
+        predictionResponse,
+
+        riskResponse,
+
+        riskHistoryResponse,
+
+        alertsResponse
+
+      ] = await Promise.all([
+
+        API.get(
+          `/weather/${selectedCity}`
+        ),
+
+        API.get(
+          `/history/${selectedCity}`
+        ),
+
+        API.get(
+          "/predict"
+        ),
+
+        API.get(
+          `/risk/${selectedCity}`
+        ),
+
+        API.get(
+          `/risk-history/${selectedCity}`
+        ),
+
+        API.get(
+          `/alerts/${selectedCity}`
+        )
+
+      ]);
+
+      setWeather(
+        weatherResponse.data
       );
 
       setHistoryData(
         historyResponse.data
       );
 
-      // Forecast
-      const predictionResponse = await API.get(
-        "/predict"
-      );
-
       setPredictions({
+
         lstm:
           predictionResponse.data
             .lstm_prediction,
@@ -69,35 +107,20 @@ const Dashboard = () => {
         xgboost:
           predictionResponse.data
             .xgboost_prediction
+
       });
 
-      // Risk Score
-      const riskResponse = await API.get(
-        `/risk/${selectedCity}`
-      );
-
       setRiskScore(
+
         riskResponse.data
           .risk_report
           .overall_score
-      );
 
-      // Risk History
-      const riskHistoryResponse =
-        await API.get(
-          `/risk-history/${selectedCity}`
-        );
+      );
 
       setRiskHistory(
         riskHistoryResponse.data
       );
-
-      // Alerts
-
-      const alertsResponse =
-        await API.get(
-          `/alerts/${selectedCity}`
-        );
 
       setAlerts(
         alertsResponse.data.alerts
@@ -105,10 +128,15 @@ const Dashboard = () => {
 
     } catch (error) {
 
-      console.error(
-        "Error fetching dashboard data:",
-        error
+      console.error(error);
+
+      setError(
+        "Unable to load climate data."
       );
+
+    } finally {
+
+      setLoading(false);
 
     }
   };
@@ -121,14 +149,60 @@ const Dashboard = () => {
 
   const handleSearch = () => {
 
-    if (inputCity.trim()) {
+    if (!inputCity.trim())
+      return;
 
-      setCity(inputCity);
+    setCity(inputCity);
 
-      setInputCity("");
+    setInputCity("");
 
-    }
   };
+
+  if (loading) {
+
+    return (
+
+      <div>
+
+        <Navbar />
+
+        <div
+          className="dashboard-container"
+        >
+
+          <h2>
+            Loading Climate Data...
+          </h2>
+
+        </div>
+
+      </div>
+
+    );
+  }
+
+  if (error) {
+
+    return (
+
+      <div>
+
+        <Navbar />
+
+        <div
+          className="dashboard-container"
+        >
+
+          <h2>
+            {error}
+          </h2>
+
+        </div>
+
+      </div>
+
+    );
+  }
 
   return (
 
@@ -171,11 +245,17 @@ const Dashboard = () => {
 
         </h2>
 
-        <AlertBanner alerts={alerts}/>
+        {/* Alerts */}
 
-        {/* Climate Insight */}
+        <AlertBanner
+          alerts={alerts}
+        />
 
-        <ClimateInsights city={city}/>
+        {/* AI Insights */}
+
+        <ClimateInsights
+          city={city}
+        />
 
         {/* Metrics */}
 
@@ -247,13 +327,13 @@ const Dashboard = () => {
           data={riskHistory}
         />
 
-        {/* Map */}
+        {/* Climate Map */}
 
         <ClimateMap
           weather={weather}
         />
 
-        {/* AI Section */}
+        {/* AI Tools */}
 
         <div className="assistant-section">
 
