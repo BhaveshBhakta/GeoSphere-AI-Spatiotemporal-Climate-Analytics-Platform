@@ -13,6 +13,7 @@ import RiskCard from "../components/RiskCard";
 import AlertBanner from "../components/AlertBanner";
 import ClimateInsights from "../components/ClimateInsights";
 import CityComparison from "../components/CityComparison";
+import Forecast7Chart from "../components/Forecast7Chart";
 
 import API from "../services/api";
 
@@ -36,6 +37,8 @@ const Dashboard = () => {
     lstm: null,
     xgboost: null
   });
+
+  const [forecast7, setForecast7] = useState([]);
 
   const [city, setCity] = useState("Delhi");
 
@@ -61,7 +64,9 @@ const Dashboard = () => {
 
         riskHistoryResponse,
 
-        alertsResponse
+        alertsResponse,
+
+        forecast7Response
 
       ] = await Promise.all([
 
@@ -87,6 +92,10 @@ const Dashboard = () => {
 
         API.get(
           `/alerts/${selectedCity}`
+        ),
+
+        API.get(
+          "/forecast7"
         )
 
       ]);
@@ -125,6 +134,24 @@ const Dashboard = () => {
 
       setAlerts(
         alertsResponse.data.alerts
+      );
+
+      const formattedForecast =
+
+        forecast7Response.data.forecast.map(
+          (value, index) => ({
+
+            day:
+              `Day ${index + 1}`,
+
+            temperature:
+              Number(value)
+
+          })
+        );
+
+      setForecast7(
+        formattedForecast
       );
 
     } catch (error) {
@@ -316,6 +343,13 @@ const Dashboard = () => {
           }
         />
 
+
+        {/* 7 Day Forecast */}
+
+        <Forecast7Chart
+          data={forecast7}
+        />
+
         {/* Historical Weather */}
 
         <HistoricalChart
@@ -346,7 +380,7 @@ const Dashboard = () => {
 
         </div>
 
-         {/* City Comparison */}
+        {/* City Comparison */}
 
         <CityComparison />
 
