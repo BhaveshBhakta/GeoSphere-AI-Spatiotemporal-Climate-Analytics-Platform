@@ -15,6 +15,7 @@ from app.routes.compare import (router as compare_router)
 from app.routes.alerts import (router as alerts_router)
 from app.routes.insights import (router as insights_router)
 from app.routes.forecast7 import (router as forecast7_router)
+from app.routes.scenario import (router as scenario_router)
 
 app = FastAPI()
 
@@ -41,6 +42,7 @@ app.include_router(compare_router)
 app.include_router(alerts_router)
 app.include_router(insights_router)
 app.include_router(forecast7_router)
+app.include_router(scenario_router)
 
 @app.get("/")
 def home():
